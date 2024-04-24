@@ -1,0 +1,24 @@
+﻿<Window x:Class="AttendanceEmp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AttendanceEmp"
+        mc:Ignorable="d"
+        Title="Сотрудники" Height="450" Width="800">
+    <Grid>
+        <DataGrid x:Name="EmployeeDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,244" Height="190"/>
+        <Button x:Name="DataRefresh" Content="Загрузить таблицу" HorizontalAlignment="Left" Margin="660,0,0,0" VerticalAlignment="Center" Height="28" Width="119" Click="DataRefresh_Click"/>
+        <TextBox x:Name="DBSearchBox" HorizontalAlignment="Left" Margin="20,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325" Height="30"/>
+        <Button x:Name="DBSearchButton" Content="Поиск" HorizontalAlignment="Left" Margin="379,207,0,0" VerticalAlignment="Top" Height="28" Width="85" Click="DBSearchButton_Click"/>
+        <GroupBox HorizontalAlignment="Left" Height="73" Header="Выполнить поиск по:" Margin="20,241,0,0" VerticalAlignment="Top" Width="136">
+            <StackPanel Height="54" Margin="0,0,21,0">
+                <RadioButton x:Name="FullNameRadioButton" IsChecked="True" Margin="3">ФИО</RadioButton>
+                <RadioButton x:Name="PositionRadioButton" Margin="3">Должность</RadioButton>
+            </StackPanel>
+        </GroupBox>
+        <Button x:Name="NewFormButton" Content="Посещаемость" HorizontalAlignment="Left" Height="34" Margin="632,339,0,0" VerticalAlignment="Top" Width="110" Click="NewFormButton_Click"/>
+        <Button x:Name="ExportToExcelButton" Content="Экспортировать в Excel" HorizontalAlignment="Left" Margin="616,278,0,0" VerticalAlignment="Top" Height="36" Width="143" Click="ExportToExcelButton_Click"/>
+
+    </Grid>
+</Window>
