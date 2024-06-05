@@ -19,27 +19,27 @@ namespace AttendanceEmp
         public MainWindow()
         {
             InitializeComponent(); // Инициализация XAML главного окна
-            connectionString = "Server=localhost;Database=empattend;Uid=root;Pwd=Kate+Kate19;"; // Установка соединения с бд
+            connectionString = "Server=localhost;Database=empattend;Uid=root;Pwd=Kate+Kate19;"; // Строка соединения с бд
         }   
 
-        // Method to load employee data from the database and populate the DataGrid
+        // Метод, загружающий данные из бд в DataGrid
         private void LoadEmployeeData()
         {
-            string sql = "SELECT * FROM employees";// SQL query to select all columns from the employees table
+            string sql = "SELECT * FROM employees";
             DataTable employeeData = new DataTable();
 
-            // Establish a connection to the MySQL database
+            // Установка соединения с бд
             try
             {
-                using (MySqlConnection connection = new MySqlConnection(connectionString))// Create a command to execute the SQL query
-                using (MySqlCommand command = new MySqlCommand(sql, connection))// Create a data adapter to fill the DataTable with the query results
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))// Execute the query and fill the DataTable
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                using (MySqlCommand command = new MySqlCommand(sql, connection))// Создание дата адаптера
+                using (MySqlDataAdapter adapter = new MySqlDataAdapter(command))
                 {
                     connection.Open();
                     adapter.Fill(employeeData);
                 }
 
-                // Bind the DataTable to the DataGrid
+                // Привязка данных, полученных из бд, к DataGrid
                 EmployeeDataGrid.ItemsSource = employeeData.DefaultView;
             }
             catch (Exception ex)
@@ -47,16 +47,14 @@ namespace AttendanceEmp
                 MessageBox.Show($"Ошибка: {ex.Message}");
             }
         }
-
+        // Нажатие кнопки запускает метод, загружающий данные из бд
         private void DataRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            // This button click event can be used to refresh the employee data
+        {           
             LoadEmployeeData();
         }
-        // Method to search for employees by position
+        // Метод для поиска сотрудника по ФИО или должности
         private void SearchEmployeesByAttribute(string attributeName, string attributeValue)
         {
-            // Construct the SQL query dynamically based on the attribute name and value
             string sql = $"SELECT * FROM employees WHERE {attributeName} = @AttributeValue";
             DataTable employeeData = new DataTable();
 
@@ -65,7 +63,7 @@ namespace AttendanceEmp
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 using (MySqlCommand command = new MySqlCommand(sql, connection))
                 {
-                    // Add parameter to prevent SQL injection
+                    // Добавление параметра для предотвращения внедрения SQL-кода
                     command.Parameters.AddWithValue("@AttributeValue", attributeValue);
 
                     connection.Open();
@@ -79,15 +77,15 @@ namespace AttendanceEmp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}");
+                MessageBox.Show($"Ошибка: {ex.Message}");
             }
         }
         private void DBSearchButton_Click(object sender, RoutedEventArgs e)
         {
-            // Get the search term from the TextBox
+            // Получение данных для поиска из TextBox
             string attributeValue = DBSearchBox.Text;
             string attributeName = DBSearchBox.Text;
-            // Determine which RadioButton is selected and search by the corresponding attribute
+            // Активная кнопка определяет атрибут, по которому проводится поиск
             if ((bool)PositionRadioButton.IsChecked)
             {
                 SearchEmployeesByAttribute("Должность", attributeName);
@@ -97,6 +95,7 @@ namespace AttendanceEmp
                 SearchEmployeesByAttribute("ФИО", attributeName);
             }
         }
+        //Метод для экспорта данных из бд в Excel-файл
         private void ExportToExcelButton_Click(object sender, RoutedEventArgs e)
         {
             string sql = "SELECT * FROM employees";
@@ -116,7 +115,7 @@ namespace AttendanceEmp
                 // Добавление нового листа в Excel-файл
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Employees Data");
 
-                // Заполнение листа данными из DataTable
+                // Заполнение листа данными из бд
                 worksheet.Cells["A1"].LoadFromDataTable(empData, true);
 
                 // Сохранение Excel-файла
@@ -127,11 +126,12 @@ namespace AttendanceEmp
 
             MessageBox.Show("Данные успешно экспортированы в Excel-файл.");
         }
-
+        // открытие нового окна
         private void NewFormButton_Click(object sender, RoutedEventArgs e)
         {
             Window1 window1 = new Window1();
             window1.Show();
+            this.Close();
         }
     }
 }

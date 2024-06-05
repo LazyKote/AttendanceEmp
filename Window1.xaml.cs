@@ -29,14 +29,14 @@ namespace AttendanceEmp
         public Window1()
         {
             InitializeComponent();
-            connectionString = "Server=localhost;Database=empattend;Uid=root;Pwd=Kate+Kate19;"; // Установка соединения с бд
+            connectionString = "Server=localhost;Database=empattend;Uid=root;Pwd=Kate+Kate19;"; // Строка соединения с бд
         }
         private void LoadAttendenceData()
         {
-            string sql = "SELECT * FROM attendance"; // SQL query to select all columns from the attendance table
+            string sql = "SELECT * FROM attendance";
             DataTable attendData = new DataTable();
 
-            // Establish a connection to the MySQL database
+            // Установка соединения с бдe
             try
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -47,7 +47,7 @@ namespace AttendanceEmp
                     adapter.Fill(attendData);
                 }
 
-                // Bind the DataTable to the DataGrid
+                // Привязка данных, полученных из бд, к DataGrid
                 AttendenceData.ItemsSource = attendData.DefaultView;
             }
             catch (Exception ex)
@@ -56,12 +56,13 @@ namespace AttendanceEmp
             }
         }
 
+        // Нажатие кнопки запускает метод, загружающий данные из бд
         private void AttendDataLoad_Click(object sender, RoutedEventArgs e)
         {
-            // This button click event can be used to refresh the attendance data
             LoadAttendenceData();
         }
 
+        //Метод, считающий количество часов, отработанных сотрудником за месяц
         public double CalculateHoursWorkedForMonth(string employeeName, int month, int year)
         {
             double totalHoursWorked = 0;
@@ -75,7 +76,7 @@ namespace AttendanceEmp
                 command.CommandText = @"SELECT ВремяВхода, ВремяВыхода 
                                     FROM attendance 
                                     WHERE ФИО = @EmployeeName AND MONTH(ВремяВхода) = @Month AND YEAR(ВремяВхода) = @Year";
-
+                // Добавление параметров для предотвращения внедрения SQL-кода
                 command.Parameters.AddWithValue("@EmployeeName", employeeName);
                 command.Parameters.AddWithValue("@Month", month);
                 command.Parameters.AddWithValue("@Year", year);
@@ -84,6 +85,7 @@ namespace AttendanceEmp
                 {
                     while (reader.Read())
                     {
+                        //Вычисляется время работы за каждый день и суммируется в totalHoursWorked
                         DateTime arrivalTime = reader.GetDateTime(0);
                         DateTime departureTime = reader.IsDBNull(1) ? DateTime.Now : reader.GetDateTime(1);
 
@@ -92,16 +94,37 @@ namespace AttendanceEmp
                     }
                 }
             }
-
+            UpdateTotalHoursWorked(employeeName, totalHoursWorked);
             return totalHoursWorked;
+        }
+        public void UpdateTotalHoursWorked(string employeeName, double totalHoursWorked)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            using (MySqlCommand command = new MySqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+
+                command.CommandText = @"UPDATE employees 
+                                SET totalhoursworked = @TotalHoursWorked 
+                                WHERE ФИО = @EmployeeName AND MONTH(ВремяВхода) = @Month AND YEAR(ВремяВхода) = @Year";
+                // Добавление параметров для предотвращения внедрения SQL-кода
+                command.Parameters.AddWithValue("@TotalHoursWorked", totalHoursWorked);
+                command.Parameters.AddWithValue("@EmployeeName", employeeName);
+               
+
+                command.ExecuteNonQuery();
+            }
         }
 
         private void CountButton_Click(object sender, RoutedEventArgs e)
         {
+            //Получение необходимых данных из TextBox
             int month = Convert.ToInt32(MonthText.Text);
             int year = Convert.ToInt32(YearText.Text);
             string employeeName = FullNameText.Text;
 
+            //В зависимости от активной кнопки запускает тот или иной скрипт
             if (HoursRadioButton.IsChecked == true)
             {
                 double totalHoursWorked = CalculateHoursWorkedForMonth(employeeName, month, year);
@@ -113,6 +136,7 @@ namespace AttendanceEmp
                 MessageBox.Show($"Количество дней без посещения: {daysWithoutAttendance}");
             }
         }
+        //Метод, подсчитывающий количество прогулов у сотрудника за месяц
         public int CalculateDaysWithoutAttendance(string employeeName, int month, int year)
         {
             int totalDaysInMonth = DateTime.DaysInMonth(year, month);
@@ -124,7 +148,7 @@ namespace AttendanceEmp
                 connection.Open();
                 command.Connection = connection;
 
-                // Подсчет количества записей для сотрудника
+                // Подсчет количества записей входа/выхода сотрудника
                 command.CommandText = @"SELECT COUNT(*) 
                                 FROM attendance 
                                 WHERE ФИО = @EmployeeName AND MONTH(ВремяВхода) = @Month AND YEAR(ВремяВхода) = @Year";
@@ -136,11 +160,12 @@ namespace AttendanceEmp
                 totalAttendanceDays = Convert.ToInt32(command.ExecuteScalar());
             }
 
-            // Вычитаем количество дней отсутствия от общего количества дней в месяце
+            // Вычитается количество дней отсутствия от общего количества рабочих дней в месяце
             int daysWithoutAttendance = totalDaysInMonth - totalAttendanceDays-8;
 
             return daysWithoutAttendance;
         }
+        //Метод для экспорта данных из бд в Excel-файл
         private void ExportToExcelButton_Click(object sender, RoutedEventArgs e)
         {
             string sql = "SELECT * FROM attendance";
@@ -153,11 +178,6 @@ namespace AttendanceEmp
                 connection.Open();
                 adapter.Fill(ettendData);
             }
-            foreach (DataRow row in ettendData.Rows)
-            {
-                // Явно указываем тип данных для столбца ВремяВхода
-                ettendData.Columns["ВремяВхода"].DataType = typeof(DateTime);
-            }
 
             // Создание нового Excel-файла
             using (ExcelPackage package = new ExcelPackage())
@@ -165,7 +185,7 @@ namespace AttendanceEmp
                 // Добавление нового листа в Excel-файл
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Attendance Data");
 
-                // Заполнение листа данными из DataTable
+                // Заполнение листа данными из бд
                 worksheet.Cells["A1"].LoadFromDataTable(ettendData, true);
 
                 // Сохранение Excel-файла
@@ -175,6 +195,13 @@ namespace AttendanceEmp
             }
 
             MessageBox.Show("Данные успешно экспортированы в Excel-файл.");
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
     }
 }

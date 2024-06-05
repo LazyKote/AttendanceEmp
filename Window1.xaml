@@ -7,21 +7,28 @@
         mc:Ignorable="d"
         Title="Посещаемость" Height="450" Width="800">
     <Grid>
-        <DataGrid x:Name="AttendenceData" Margin="0,0,0,244" d:ItemsSource="{d:SampleData ItemCount=5}" Width="800" Height="190" Background="White" BorderBrush="#FF222222"/>
-        <Button x:Name="AttendDataLoad" Content="Загрузить таблицу" HorizontalAlignment="Left" Margin="618,198,0,0" VerticalAlignment="Top" Width="116" Click="AttendDataLoad_Click"/>
-        <TextBox x:Name="FullNameText" HorizontalAlignment="Left" Margin="70,198,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="238"/>
-        <Label Content="ФИО:" HorizontalAlignment="Left" Margin="21,194,0,0" VerticalAlignment="Top" Height="23" Width="44"/>
-        <Label Content="Месяц:" HorizontalAlignment="Left" Margin="21,222,0,0" VerticalAlignment="Top" Height="26" Width="53"/>
-        <TextBox x:Name="MonthText" HorizontalAlignment="Left" Margin="79,226,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="54"/>
-        <Label Content="Год:" HorizontalAlignment="Left" Margin="153,222,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
-        <TextBox x:Name="YearText" HorizontalAlignment="Left" Margin="194,226,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="54"/>
-        <Button x:Name="CountButton" Content="Вычислить" HorizontalAlignment="Left" Margin="333,197,0,0" VerticalAlignment="Top" Width="78" Click="CountButton_Click"/>
-        <GroupBox HorizontalAlignment="Left" Height="73" Header="Вычислить:" Margin="21,253,0,0" VerticalAlignment="Top" Width="133">
-            <StackPanel Height="54" Margin="0,0,21,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="AttendenceData" Margin="0,0,448,0" d:ItemsSource="{d:SampleData ItemCount=5}" Width="352" Height="434" Background="White" BorderBrush="#FF222222"/>
+        <Button x:Name="AttendDataLoad" Content="Загрузить таблицу" HorizontalAlignment="Left" Margin="628,61,0,0" VerticalAlignment="Top" Width="162" Click="AttendDataLoad_Click" Height="30" FontSize="14"/>
+        <TextBox x:Name="FullNameText" HorizontalAlignment="Left" Margin="415,10,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="238" Height="30"/>
+        <Label Content="ФИО:" HorizontalAlignment="Left" Margin="366,10,0,0" VerticalAlignment="Top" Height="30" Width="44" FontSize="14"/>
+        <Label Content="Месяц:" HorizontalAlignment="Left" Margin="362,61,0,0" VerticalAlignment="Top" Height="30" Width="52" FontSize="14"/>
+        <TextBox x:Name="MonthText" HorizontalAlignment="Left" Margin="420,61,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="54" Height="30"/>
+        <Label Content="Год:" HorizontalAlignment="Left" Margin="493,61,0,0" VerticalAlignment="Top" Height="30" Width="36" FontSize="14"/>
+        <TextBox x:Name="YearText" HorizontalAlignment="Left" Margin="534,61,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="54" Height="30"/>
+        <Button x:Name="CountButton" Content="Вычислить" HorizontalAlignment="Left" Margin="676,10,0,0" VerticalAlignment="Top" Width="78" Click="CountButton_Click" Height="30" FontSize="14" Background="#FF92DCE5"/>
+        <GroupBox HorizontalAlignment="Left" Height="73" Header="Вычислить:" Margin="371,110,0,0" VerticalAlignment="Top" Width="163" FontSize="14">
+            <StackPanel Height="43" Margin="0,0,-2,0">
                 <RadioButton x:Name="HoursRadioButton" IsChecked="True" Margin="3">Часы работы</RadioButton>
                 <RadioButton x:Name="AbsenseRadioButton" Margin="3">Прогулы</RadioButton>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="ExportToExcelButton" Content="Экспортировать в Excel" HorizontalAlignment="Left" Height="23" Margin="606,235,0,0" VerticalAlignment="Top" Width="141" Click="ExportToExcelButton_Click"/>
+        <Button x:Name="ExportToExcelButton" Content="Экспортировать в Excel" HorizontalAlignment="Left" Height="30" Margin="628,111,0,0" VerticalAlignment="Top" Width="162" Click="ExportToExcelButton_Click" FontSize="14"/>
+        <Button Content="Сотрудники" HorizontalAlignment="Left" Height="30" Margin="628,159,0,0" VerticalAlignment="Top" Width="162" FontSize="14" Click="Button_Click" Background="#FF92DCE5"/>
     </Grid>
 </Window>

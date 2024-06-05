@@ -6,19 +6,25 @@
         xmlns:local="clr-namespace:AttendanceEmp"
         mc:Ignorable="d"
         Title="Сотрудники" Height="450" Width="800">
-    <Grid>
-        <DataGrid x:Name="EmployeeDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,0,244" Height="190"/>
-        <Button x:Name="DataRefresh" Content="Загрузить таблицу" HorizontalAlignment="Left" Margin="660,0,0,0" VerticalAlignment="Center" Height="28" Width="119" Click="DataRefresh_Click"/>
-        <TextBox x:Name="DBSearchBox" HorizontalAlignment="Left" Margin="20,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="325" Height="30"/>
-        <Button x:Name="DBSearchButton" Content="Поиск" HorizontalAlignment="Left" Margin="379,207,0,0" VerticalAlignment="Top" Height="28" Width="85" Click="DBSearchButton_Click"/>
-        <GroupBox HorizontalAlignment="Left" Height="73" Header="Выполнить поиск по:" Margin="20,241,0,0" VerticalAlignment="Top" Width="136">
+    <Grid Background="#FFF8F7F9">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="EmployeeDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,0,448,0" BorderBrush="#FF2B2D42" Foreground="#FF2B2D42" Height="434"/>
+        <Button x:Name="DataRefresh" Content="Загрузить таблицу" HorizontalAlignment="Right" Margin="0,56,10,0" VerticalAlignment="Top" Height="28" Width="159" Click="DataRefresh_Click" FontSize="14"/>
+        <TextBox x:Name="DBSearchBox" HorizontalAlignment="Right" Margin="0,10,108,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="326" Height="30" BorderBrush="#FF2B2D42"/>
+        <Button x:Name="DBSearchButton" Content="Поиск" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="28" Width="85" Click="DBSearchButton_Click" Background="#FF92DCE5" BorderBrush="#FF2B2D42" FontSize="14"/>
+        <GroupBox HorizontalAlignment="Left" Height="102" Header="Выполнить поиск по:" Margin="366,56,0,0" VerticalAlignment="Top" Width="162" FontSize="14" BorderBrush="#FF2B2D42">
             <StackPanel Height="54" Margin="0,0,21,0">
-                <RadioButton x:Name="FullNameRadioButton" IsChecked="True" Margin="3">ФИО</RadioButton>
-                <RadioButton x:Name="PositionRadioButton" Margin="3">Должность</RadioButton>
+                <RadioButton x:Name="FullNameRadioButton" IsChecked="True" Margin="3" BorderBrush="#FF2B2D42">ФИО</RadioButton>
+                <RadioButton x:Name="PositionRadioButton" Margin="3" BorderBrush="#FF2B2D42">Должность</RadioButton>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="NewFormButton" Content="Посещаемость" HorizontalAlignment="Left" Height="34" Margin="632,339,0,0" VerticalAlignment="Top" Width="110" Click="NewFormButton_Click"/>
-        <Button x:Name="ExportToExcelButton" Content="Экспортировать в Excel" HorizontalAlignment="Left" Margin="616,278,0,0" VerticalAlignment="Top" Height="36" Width="143" Click="ExportToExcelButton_Click"/>
+        <Button x:Name="NewFormButton" Content="Посещаемость" HorizontalAlignment="Right"  Margin="0,93,10,0" VerticalAlignment="Top" Height="28" Width="159" Click="NewFormButton_Click" Background="#FF92DCE5" FontSize="14"/>
+        <Button x:Name="ExportToExcelButton" Content="Экспортировать в Excel" HorizontalAlignment="Right" Margin="0,130,10,0" VerticalAlignment="Top" Height="28" Width="159" Click="ExportToExcelButton_Click" FontSize="14"/>
 
     </Grid>
 </Window>
